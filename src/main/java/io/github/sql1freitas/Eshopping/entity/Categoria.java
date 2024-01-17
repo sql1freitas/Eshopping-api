@@ -1,16 +1,15 @@
 package io.github.sql1freitas.Eshopping.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Categoria {
@@ -21,13 +20,11 @@ public class Categoria {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "categoria",  cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "categoria_produto",
-            joinColumns = @JoinColumn(name = "categoria_id"),
-            inverseJoinColumns = @JoinColumn(name = "produto_id"))
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private List<Produto> produtos = new ArrayList<>();
 
+    @Column
     private Boolean habilitar;
+
 
 }

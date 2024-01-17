@@ -1,16 +1,15 @@
 package io.github.sql1freitas.Eshopping.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Produto {
@@ -27,10 +26,12 @@ public class Produto {
 
     @ManyToOne
     @JoinColumn(name = "marca_id")
+    @JsonIgnore
     private Marca marca;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
+    @JsonIgnore
     private Categoria categoria;
 
     @Column(nullable = false)
@@ -40,5 +41,7 @@ public class Produto {
     @CreatedDate
     private LocalDateTime dataEntradaEstoque;
 
+    @Column
     private Boolean habilitar;
+
 }

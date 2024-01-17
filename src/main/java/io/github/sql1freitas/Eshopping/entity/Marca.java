@@ -2,16 +2,17 @@ package io.github.sql1freitas.Eshopping.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Marca {
@@ -23,14 +24,10 @@ public class Marca {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "marca",  cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "marca_produto",
-            joinColumns = @JoinColumn(name = "marca_id"),
-            inverseJoinColumns = @JoinColumn(name = "produto_id"))
+    @OneToMany(mappedBy = "marca", cascade = CascadeType.ALL)
     private List<Produto> produtos = new ArrayList<>();
 
-
+   @Column
     private Boolean habilitar;
 
 

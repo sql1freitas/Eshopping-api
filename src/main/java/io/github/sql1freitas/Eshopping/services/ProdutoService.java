@@ -10,10 +10,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.parser.Entity;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +48,49 @@ public class ProdutoService {
 
         return produtoRepository.save(produto);
     }
+
+    public List<Produto> listarTodos (){
+        return produtoRepository.findAll();
+    }
+
+
+    public List<Produto> buscarPorNome(String name){
+        return produtoRepository.findByNameIgnoreCaseStartingWith(name);
+    }
+
+    public List<Produto> buscarPorRangePreco (Double primeiroValor,Double segundoValor){
+
+         return produtoRepository.findByPriceBetween(primeiroValor, segundoValor);
+    }
+
+    public List<Produto> buscarPorMarca (Long id){
+        Marca marca = marcaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
+
+        return produtoRepository.findByMarca(marca);
+    }
+
+    public List<Produto> buscarPorCategoria (Long id){
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
+
+        return produtoRepository.findByCategoria(categoria);
+    }
+
+
+    public void excluirProduto (Long id){
+        produtoRepository.deleteById(id);
+    }
+
+    public void desabilitar(Long id){
+        produtoRepository.desabilitarProduto(id);
+    }
+
+    public void habilitar(Long id){
+        produtoRepository.habilitarProduto(id);
+    }
+
+
 
 
 }
