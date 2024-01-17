@@ -1,5 +1,8 @@
 package io.github.sql1freitas.Eshopping.services;
 
+import io.github.sql1freitas.Eshopping.dto.Assemble;
+import io.github.sql1freitas.Eshopping.dto.MarcaDto;
+import io.github.sql1freitas.Eshopping.dto.ProdutoDto;
 import io.github.sql1freitas.Eshopping.entity.Marca;
 import io.github.sql1freitas.Eshopping.entity.Produto;
 import io.github.sql1freitas.Eshopping.repositories.MarcaRepository;
@@ -22,11 +25,14 @@ public class MarcaService {
 
     private final MarcaRepository marcaRepository;
     private final ProdutoRepository produtoRepository;
+    private final Assemble assemble;
 
 
 
-    public Marca save (Marca marca){
-        return marcaRepository.save(marca);
+    public MarcaDto save (Marca marca){
+        Marca newMarca = marcaRepository.save(marca);
+
+        return assemble.marcaParaDto(newMarca);
     }
 
     public List<Marca> listarTodas (){
@@ -39,8 +45,8 @@ public class MarcaService {
         Marca marca = marcaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
 
-        return produtoRepository.findByMarca(marca)
-                .orElse(Collections.emptyList());
+        return produtoRepository.findByMarca(marca);
+
     }
 
     public List<Marca> listarMarcaPorNome (String name){
