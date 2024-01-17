@@ -21,12 +21,9 @@ public class Categoria {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "categoria",  cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "categoria_produto",
-            joinColumns = @JoinColumn(name = "categoria_id"),
-            inverseJoinColumns = @JoinColumn(name = "produto_id"))
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private List<Produto> produtos = new ArrayList<>();
+
 
     private Boolean habilitar;
 

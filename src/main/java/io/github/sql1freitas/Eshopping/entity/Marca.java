@@ -23,13 +23,8 @@ public class Marca {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "marca",  cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "marca_produto",
-            joinColumns = @JoinColumn(name = "marca_id"),
-            inverseJoinColumns = @JoinColumn(name = "produto_id"))
+    @OneToMany( mappedBy = "marca" , cascade = CascadeType.ALL)
     private List<Produto> produtos = new ArrayList<>();
-
 
     private Boolean habilitar;
 
