@@ -5,6 +5,9 @@ import io.github.sql1freitas.Eshopping.dto.ProdutoDto;
 import io.github.sql1freitas.Eshopping.entity.Categoria;
 import io.github.sql1freitas.Eshopping.entity.Marca;
 import io.github.sql1freitas.Eshopping.entity.Produto;
+import io.github.sql1freitas.Eshopping.exceptions.EntidadeDesabilitadaException;
+import io.github.sql1freitas.Eshopping.exceptions.EntidadeHabilitadaException;
+import io.github.sql1freitas.Eshopping.exceptions.ValorInvalidoException;
 import io.github.sql1freitas.Eshopping.repositories.CategoriaRepository;
 import io.github.sql1freitas.Eshopping.repositories.MarcaRepository;
 import io.github.sql1freitas.Eshopping.repositories.ProdutoRepository;
@@ -15,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -74,6 +76,13 @@ public class ProdutoService {
 
     public List<ProdutoDto> buscarPorRangePreco (Double primeiroValor,Double segundoValor){
 
+        if(primeiroValor < 0 || segundoValor < 0){
+            throw new ValorInvalidoException();
+        }
+        if(segundoValor < primeiroValor){
+            throw new ValorInvalidoException();
+        }
+
          return produtoRepository.findByPriceBetween(primeiroValor, segundoValor)
                  .stream()
                  .map(assemble::produtoParaDto)
@@ -102,15 +111,30 @@ public class ProdutoService {
 
 
     public void excluirProduto (Long id){
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Produto não encontrado"));
         produtoRepository.deleteById(id);
     }
 
     public void desabilitar(Long id){
+
+        Produto produto = produtoRepository.findById(id)
+                        .orElseThrow(()-> new EntityNotFoundException("Produto não encontrado"));
+        if(produto.getHabilitar().equals(false)){
+            throw new EntidadeDesabilitadaException();
+        }
+
         produtoRepository.desabilitarProduto(id);
         log.info("O produto foi desabilitado com êxito: {}", id);
     }
 
     public void habilitar(Long id){
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Produto não encontrado"));
+        if(produto.getHabilitar().equals(true)){
+            throw new EntidadeHabilitadaException();
+        }
+
         produtoRepository.habilitarProduto(id);
         log.info("O produto foi habilitado com êxito: {}", id);
     }
