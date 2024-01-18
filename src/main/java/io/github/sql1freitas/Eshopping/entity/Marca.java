@@ -28,7 +28,7 @@ public class Marca {
     private List<Produto> produtos = new ArrayList<>();
 
    @Column
-    private Boolean habilitar;
+    private Boolean habilitar = true;
 
 
 }

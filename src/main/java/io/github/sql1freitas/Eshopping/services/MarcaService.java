@@ -41,6 +41,7 @@ public class MarcaService {
     public List<MarcaDto> listarTodas (){
         return marcaRepository.findAll()
                 .stream()
+                .filter(marca -> marca.getHabilitar().equals(true))
                 .map(assemble::marcaParaDto)
                 .collect(Collectors.toList());
     }
@@ -53,6 +54,7 @@ public class MarcaService {
 
         return produtoRepository.findByMarca(marca)
                 .stream()
+                .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
                 .collect(Collectors.toList());
 
@@ -62,6 +64,7 @@ public class MarcaService {
 
         return marcaRepository.findByNameIgnoreCaseStartingWith(name)
                 .stream()
+                .filter(marca -> marca.getHabilitar().equals(true))
                 .map(assemble::marcaParaDto)
                 .collect(Collectors.toList());
 
@@ -83,7 +86,7 @@ public class MarcaService {
 
         Marca marca = marcaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
-        if(marca.getHabilitar().equals(false)){
+        if(!marca.getHabilitar().equals(false)){
             throw new EntidadeDesabilitadaException();
         }
 

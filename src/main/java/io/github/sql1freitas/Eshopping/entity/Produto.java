@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Produto {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,6 +43,8 @@ public class Produto {
     private LocalDateTime dataEntradaEstoque;
 
     @Column
-    private Boolean habilitar;
+    private Boolean habilitar = true;
+
+
 
 }

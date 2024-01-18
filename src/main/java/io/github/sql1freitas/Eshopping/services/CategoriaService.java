@@ -39,6 +39,7 @@ public class CategoriaService {
 
         return categoriaRepository.findAll()
                 .stream()
+                .filter(categoria -> categoria.getHabilitar().equals(true))
                 .map(assemble::categoriaDto)
                 .collect(Collectors.toList());
     }
@@ -50,6 +51,7 @@ public class CategoriaService {
 
         return produtoRepository.findByCategoria(categoria)
                 .stream()
+                .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
                 .collect(Collectors.toList());
     }
@@ -58,6 +60,7 @@ public class CategoriaService {
 
         return categoriaRepository.findByNameIgnoreCaseStartingWith(name)
                 .stream()
+                .filter(categoria -> categoria.getHabilitar().equals(true))
                 .map(assemble::categoriaDto)
                 .collect(Collectors.toList());
     }
@@ -75,7 +78,7 @@ public class CategoriaService {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
 
-        if(categoria.getHabilitar().equals(false)){
+        if(!categoria.getHabilitar().equals(false)){
             throw new EntidadeDesabilitadaException();
         }
 

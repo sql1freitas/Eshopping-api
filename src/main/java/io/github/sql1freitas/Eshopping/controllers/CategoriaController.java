@@ -45,8 +45,8 @@ public class CategoriaController {
 
         return ResponseEntity.status(HttpStatus.OK).body(produtoList);
     }
-    @GetMapping("/todos/categoria/name/{name}")
-    public ResponseEntity<List<CategoriaDto>> listarMarcasNome(@PathVariable String name){
+    @GetMapping("/todos/name/{name}")
+    public ResponseEntity<List<CategoriaDto>> listarCategoriaNome(@PathVariable String name){
         List<CategoriaDto> categoriaList = categoriaService.listarCategoriaPorNome(name);
 
         return ResponseEntity.status(HttpStatus.OK).body(categoriaList);

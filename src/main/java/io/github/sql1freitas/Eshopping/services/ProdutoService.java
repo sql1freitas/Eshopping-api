@@ -62,6 +62,7 @@ public class ProdutoService {
     public List<ProdutoDto> listarTodos (){
         return produtoRepository.findAll()
                 .stream()
+                .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
                 .collect(Collectors.toList());
     }
@@ -70,6 +71,7 @@ public class ProdutoService {
     public List<ProdutoDto> buscarPorNome(String name){
         return produtoRepository.findByNameIgnoreCaseStartingWith(name)
                 .stream()
+                .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
                 .collect(Collectors.toList());
     }
@@ -85,6 +87,7 @@ public class ProdutoService {
 
          return produtoRepository.findByPriceBetween(primeiroValor, segundoValor)
                  .stream()
+                 .filter(produto -> produto.getHabilitar().equals(true))
                  .map(assemble::produtoParaDto)
                  .collect(Collectors.toList());
     }
@@ -95,6 +98,7 @@ public class ProdutoService {
 
         return produtoRepository.findByMarca(marca)
                 .stream()
+                .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
                 .collect(Collectors.toList());
     }
@@ -105,6 +109,7 @@ public class ProdutoService {
 
         return produtoRepository.findByCategoria(categoria)
                 .stream()
+                .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
                 .collect(Collectors.toList());
     }
@@ -131,9 +136,11 @@ public class ProdutoService {
     public void habilitar(Long id){
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Produto não encontrado"));
-        if(produto.getHabilitar().equals(true)){
-            throw new EntidadeHabilitadaException();
-        }
+
+            if (produto.getHabilitar().equals(true)) {
+                throw new EntidadeHabilitadaException();
+            }
+
 
         produtoRepository.habilitarProduto(id);
         log.info("O produto foi habilitado com êxito: {}", id);

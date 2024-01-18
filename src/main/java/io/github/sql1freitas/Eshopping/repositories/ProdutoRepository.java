@@ -30,6 +30,6 @@ public interface ProdutoRepository extends JpaRepository <Produto,Long> {
     List<Produto> findByCategoria (Categoria categoria);
 
     List<Produto> findByNameIgnoreCaseStartingWith (String name);
-    @Query(value = "select * from produto p where p.price between primeiroValor and segundoValor;")
+    @Query("SELECT p FROM Produto p WHERE p.price BETWEEN :primeiroValor AND :segundoValor")
     List<Produto> findByPriceBetween (Double primeiroValor, Double segundoValor);
 }

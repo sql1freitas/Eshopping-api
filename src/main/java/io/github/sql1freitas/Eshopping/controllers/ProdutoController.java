@@ -60,7 +60,7 @@ public class ProdutoController {
 
         return ResponseEntity.status(HttpStatus.OK).body(produtoList);
     }
-    @DeleteMapping("/deletar/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> excluirProduto(@PathVariable Long id){
         produtoService.excluirProduto(id);
 

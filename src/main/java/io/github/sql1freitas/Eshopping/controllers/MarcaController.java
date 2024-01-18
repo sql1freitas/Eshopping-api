@@ -44,7 +44,7 @@ public class MarcaController {
 
         return ResponseEntity.status(HttpStatus.OK).body(produtoList);
     }
-    @GetMapping("/todos/marca/name/{name}")
+    @GetMapping("/todos/name/{name}")
     public ResponseEntity<List<MarcaDto>> listarMarcasNome(@PathVariable String name){
          List<MarcaDto> marcaList = marcaService.listarMarcaPorNome(name);
 
