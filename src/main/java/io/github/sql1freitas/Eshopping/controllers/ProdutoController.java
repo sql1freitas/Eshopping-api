@@ -67,14 +67,14 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PatchMapping("/desativar/{id}")
+    @PatchMapping("/desabilitar/{id}")
     public ResponseEntity<Void> desabilitarProduto (@PathVariable Long id){
         produtoService.desabilitar(id);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PatchMapping("/ativar/{id}")
+    @PatchMapping("/habilitar/{id}")
     public ResponseEntity<Void> habilitarProduto (@PathVariable Long id){
         produtoService.habilitar(id);
 

@@ -78,7 +78,7 @@ public class CategoriaService {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
 
-        if(!categoria.getHabilitar().equals(false)){
+        if(categoria.getHabilitar().equals(false)){
             throw new EntidadeDesabilitadaException();
         }
 

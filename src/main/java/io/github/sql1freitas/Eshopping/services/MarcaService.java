@@ -86,7 +86,7 @@ public class MarcaService {
 
         Marca marca = marcaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
-        if(!marca.getHabilitar().equals(false)){
+        if(marca.getHabilitar().equals(false)){
             throw new EntidadeDesabilitadaException();
         }
 

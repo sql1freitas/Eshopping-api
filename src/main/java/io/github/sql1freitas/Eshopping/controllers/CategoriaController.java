@@ -58,14 +58,14 @@ public class CategoriaController {
 
         return ResponseEntity.noContent().build();
     }
-    @PatchMapping("/desativar/{id}")
+    @PatchMapping("/desabilitar/{id}")
     public ResponseEntity<Void> desabilitarMarca (@PathVariable Long id){
         categoriaService.desabilitar(id);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PatchMapping("/ativar/{id}")
+    @PatchMapping("/habilitar/{id}")
     public ResponseEntity<Void> habilitarMarca (@PathVariable Long id){
         categoriaService.habilitar(id);
 
