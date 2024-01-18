@@ -57,14 +57,14 @@ public class MarcaController {
 
         return ResponseEntity.noContent().build();
     }
-    @PatchMapping("/desativar/{id}")
+    @PatchMapping("/habilitar/{id}")
     public ResponseEntity<Void> desabilitarMarca (@PathVariable Long id){
         marcaService.desabilitar(id);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PatchMapping("/ativar/{id}")
+    @PatchMapping("/desabilitar/{id}")
     public ResponseEntity<Void> habilitarMarca (@PathVariable Long id){
         marcaService.habilitar(id);
 
