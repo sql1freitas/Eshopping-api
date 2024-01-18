@@ -1,5 +1,6 @@
 package io.github.sql1freitas.Eshopping.dto;
 
+import io.github.sql1freitas.Eshopping.services.MarcaService;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,5 +12,8 @@ public class MarcaDto {
 
     public MarcaDto(String name) {
         this.name = name;
+    }
+
+    public MarcaDto() {
     }
 }

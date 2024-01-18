@@ -12,4 +12,7 @@ public class CategoriaDto {
     public CategoriaDto(String name) {
         this.name = name;
     }
+
+    public CategoriaDto() {
+    }
 }

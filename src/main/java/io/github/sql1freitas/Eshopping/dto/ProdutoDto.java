@@ -18,6 +18,10 @@ public class ProdutoDto {
         this.price = price;
         this.quantidadeEstoque = quantidadeEstoque;
     }
+
+    public ProdutoDto() {
+
+    }
 }
 
 
