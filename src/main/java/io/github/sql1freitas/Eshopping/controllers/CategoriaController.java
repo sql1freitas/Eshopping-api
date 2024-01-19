@@ -39,9 +39,9 @@ public class CategoriaController {
     }
 
     @GetMapping("/todos/produto/{id}")
-    public ResponseEntity<List<ProdutoDto>> listarTodos (@PathVariable Long id){
+    public ResponseEntity<List<ProdutoDto>> listarTodos (@PathVariable String name){
 
-        List<ProdutoDto> produtoList = categoriaService.listarTodosProdutos(id);
+        List<ProdutoDto> produtoList = categoriaService.listarTodosProdutos(name);
 
         return ResponseEntity.status(HttpStatus.OK).body(produtoList);
     }
@@ -58,16 +58,10 @@ public class CategoriaController {
 
         return ResponseEntity.noContent().build();
     }
-    @PatchMapping("/desabilitar/{id}")
-    public ResponseEntity<Void> desabilitarMarca (@PathVariable Long id){
-        categoriaService.desabilitar(id);
+    @PatchMapping("/alternar-status/{id}")
+    public ResponseEntity<Void> alternarStatus(@PathVariable Long id){
 
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @PatchMapping("/habilitar/{id}")
-    public ResponseEntity<Void> habilitarMarca (@PathVariable Long id){
-        categoriaService.habilitar(id);
+        categoriaService.alternarStatus(id);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

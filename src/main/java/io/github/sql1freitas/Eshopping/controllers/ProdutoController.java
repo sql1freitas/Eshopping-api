@@ -47,16 +47,16 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK).body(produtoList);
     }
 
-    @GetMapping("/todos/marca/{id}")
-    public ResponseEntity<List<ProdutoDto>> buscarPorMarca(@PathVariable Long id){
-       List<ProdutoDto> produtoList = produtoService.buscarPorMarca(id);
+    @GetMapping("/todos/marca/{name}")
+    public ResponseEntity<List<ProdutoDto>> buscarPorMarca(@PathVariable String name){
+       List<ProdutoDto> produtoList = produtoService.buscarPorMarca(name);
 
        return ResponseEntity.status(HttpStatus.OK).body(produtoList);
     }
 
-    @GetMapping("/todos/categoria/{id}")
-    public ResponseEntity<List<ProdutoDto>> buscarPorCategoria(@PathVariable Long id){
-        List<ProdutoDto> produtoList = produtoService.buscarPorCategoria(id);
+    @GetMapping("/todos/categoria/{name}")
+    public ResponseEntity<List<ProdutoDto>> buscarPorCategoria(@PathVariable String name){
+        List<ProdutoDto> produtoList = produtoService.buscarPorCategoria(name);
 
         return ResponseEntity.status(HttpStatus.OK).body(produtoList);
     }
@@ -66,18 +66,12 @@ public class ProdutoController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    @PatchMapping("/alternar-status/{id}")
+    public ResponseEntity<Void> alternarStatus(@PathVariable Long id){
 
-    @PatchMapping("/desabilitar/{id}")
-    public ResponseEntity<Void> desabilitarProduto (@PathVariable Long id){
-        produtoService.desabilitar(id);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @PatchMapping("/habilitar/{id}")
-    public ResponseEntity<Void> habilitarProduto (@PathVariable Long id){
-        produtoService.habilitar(id);
+        produtoService.alternarStatus(id);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
 }

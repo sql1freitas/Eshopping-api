@@ -37,10 +37,10 @@ public class MarcaController {
         return ResponseEntity.status(HttpStatus.OK).body(marcaList);
     }
 
-    @GetMapping("/todos/produto/{id}")
-    public ResponseEntity<List<ProdutoDto>> listarTodos (@PathVariable Long id){
+    @GetMapping("/todos/produto/{name}")
+    public ResponseEntity<List<ProdutoDto>> listarTodos (@PathVariable String name){
 
-        List<ProdutoDto> produtoList = marcaService.listarTodosProdutos(id);
+        List<ProdutoDto> produtoList = marcaService.listarTodosProdutos(name);
 
         return ResponseEntity.status(HttpStatus.OK).body(produtoList);
     }
@@ -57,16 +57,11 @@ public class MarcaController {
 
         return ResponseEntity.noContent().build();
     }
-    @PatchMapping("/habilitar/{id}")
-    public ResponseEntity<Void> desabilitarMarca (@PathVariable Long id){
-        marcaService.desabilitar(id);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
+    @PatchMapping("/alternar-status/{id}")
+    public ResponseEntity<Void> alternarStatus(@PathVariable Long id){
 
-    @PatchMapping("/desabilitar/{id}")
-    public ResponseEntity<Void> habilitarMarca (@PathVariable Long id){
-        marcaService.habilitar(id);
+        marcaService.alternarStatus(id);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
