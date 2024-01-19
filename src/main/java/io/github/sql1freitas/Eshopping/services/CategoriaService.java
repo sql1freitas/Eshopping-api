@@ -4,6 +4,7 @@ import io.github.sql1freitas.Eshopping.dto.Assemble;
 import io.github.sql1freitas.Eshopping.dto.CategoriaDto;
 import io.github.sql1freitas.Eshopping.dto.ProdutoDto;
 import io.github.sql1freitas.Eshopping.entity.Categoria;
+import io.github.sql1freitas.Eshopping.entity.Produto;
 import io.github.sql1freitas.Eshopping.exceptions.EntidadeDesabilitadaException;
 import io.github.sql1freitas.Eshopping.exceptions.EntidadeHabilitadaException;
 import io.github.sql1freitas.Eshopping.repositories.CategoriaRepository;
@@ -44,12 +45,12 @@ public class CategoriaService {
                 .collect(Collectors.toList());
     }
 
-    public List<ProdutoDto> listarTodosProdutos (Long id){
+    public List<ProdutoDto> listarTodosProdutos (String name){
 
-        Categoria categoria = categoriaRepository.findById(id)
+        Categoria categoria = categoriaRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
 
-        return produtoRepository.findByCategoria(categoria)
+        return produtoRepository.findByCategoria(categoria.getName())
                 .stream()
                 .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
@@ -73,27 +74,13 @@ public class CategoriaService {
     }
 
 
-    public void desabilitar (Long id){
-
+    public void alternarStatus(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
 
-        if(categoria.getHabilitar().equals(false)){
-            throw new EntidadeDesabilitadaException();
-        }
+        boolean novoStatus = !categoria.getHabilitar();
 
-            categoriaRepository.desabilitarCategoria(id);
-            log.info("Categoria desabilitada com sucesso: {}", id);
-    }
-
-    public void habilitar (Long id){
-        Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
-        if(categoria.getHabilitar().equals(true)){
-            throw new EntidadeHabilitadaException();
-        }
-
-        categoriaRepository.habilitarCategoria(id);
-        log.info("Categoria habilitada com sucesso: {}", id);
+        produtoRepository.atualizarStatusProduto(id, novoStatus);
+        log.info("A categoria foi {} com êxito: {}", novoStatus ? "habilitado" : "desabilitado", id);
     }
 }

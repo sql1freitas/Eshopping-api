@@ -15,19 +15,15 @@ import java.util.Optional;
 public interface ProdutoRepository extends JpaRepository <Produto,Long> {
 
     @Modifying
-    @Query("UPDATE Produto p SET p.habilitar = false WHERE p.id = :id")
+    @Query("UPDATE Produto p SET p.habilitar = :status WHERE p.id = :id")
     @Transactional
-    void desabilitarProduto(@Param("id") Long id);
-
-    @Modifying
-    @Query("UPDATE Produto p SET p.habilitar = true WHERE p.id = :id")
-    @Transactional
-    void habilitarProduto(@Param("id") Long id);
+    void atualizarStatusProduto(@Param("id") Long id, @Param("status") Boolean status);
 
 
-    List<Produto> findByMarca (Marca marca);
-
-    List<Produto> findByCategoria (Categoria categoria);
+    @Query("SELECT p FROM Produto p WHERE p.marca.name = :nomeMarca%")
+    List<Produto> findByMarca(@Param("nomeMarca") String nomeMarca);
+    @Query("SELECT p FROM Produto p WHERE p.categoria.name = :nomeCategoria%")
+    List<Produto> findByCategoria(@Param("nomeCategoria") String nomeCategoria);
 
     List<Produto> findByNameIgnoreCaseStartingWith (String name);
     @Query("SELECT p FROM Produto p WHERE p.price BETWEEN :primeiroValor AND :segundoValor")

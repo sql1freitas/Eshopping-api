@@ -47,12 +47,12 @@ public class MarcaService {
     }
 
 
-    public List<ProdutoDto> listarTodosProdutos (Long id) {
+    public List<ProdutoDto> listarTodosProdutos (String name) {
 
-        Marca marca = marcaRepository.findById(id)
+        Marca marca = marcaRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
 
-        return produtoRepository.findByMarca(marca)
+        return produtoRepository.findByMarca(marca.getName())
                 .stream()
                 .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
@@ -82,28 +82,14 @@ public class MarcaService {
 
     }
 
-    public void desabilitar(Long id){
-
+    public void alternarStatus(Long id) {
         Marca marca = marcaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
-        if(marca.getHabilitar().equals(false)){
-            throw new EntidadeDesabilitadaException();
-        }
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
 
-        marcaRepository.desabilitarMarca(id);
-        log.info("Marca desabilitada com sucesso: {}", id);
-    }
+        boolean novoStatus = !marca.getHabilitar();
 
-    public void habilitar(Long id){
-        Marca marca = marcaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
-        if(marca.getHabilitar().equals(true)){
-            throw new EntidadeHabilitadaException();
-        }
-
-
-        marcaRepository.habilitarMarca(id);
-        log.info("Marca habilitada com sucesso: {}", id);
+        marcaRepository.atualizarStatusMarca(id, novoStatus);
+        log.info("A marca foi {} com êxito: {}", novoStatus ? "habilitado" : "desabilitado", id);
     }
 
 

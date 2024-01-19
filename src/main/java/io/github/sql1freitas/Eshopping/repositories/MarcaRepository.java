@@ -10,7 +10,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.Specification.anyOf;
 
@@ -18,18 +20,12 @@ public interface MarcaRepository extends JpaRepository <Marca, Long> {
 
 
     @Modifying
-    @Query("UPDATE Marca m SET m.habilitar = false WHERE m.id = :id")
+    @Query("UPDATE Marca m SET m.habilitar = :status WHERE m.id = :id")
     @Transactional
-    void desabilitarMarca(@Param("id") Long id);
+    void atualizarStatusMarca(@Param("id") Long id, @Param("status") Boolean status);
 
-
-    @Modifying
-    @Query("UPDATE Marca m SET m.habilitar = true WHERE m.id = :id")
-    @Transactional
-    void habilitarMarca(@Param("id") Long id);
-
-
-    List<Marca> findByNameIgnoreCaseStartingWith(String name);
+   Optional< Marca > findByNameIgnoreCase(String name);
+   List<Marca> findByNameIgnoreCaseStartingWith(String name);
 
 
 

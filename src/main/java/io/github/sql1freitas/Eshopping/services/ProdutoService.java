@@ -92,22 +92,22 @@ public class ProdutoService {
                  .collect(Collectors.toList());
     }
 
-    public List<ProdutoDto> buscarPorMarca (Long id){
-        Marca marca = marcaRepository.findById(id)
+    public List<ProdutoDto> buscarPorMarca (String name){
+        Marca marca = marcaRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
 
-        return produtoRepository.findByMarca(marca)
+        return produtoRepository.findByMarca(marca.getName())
                 .stream()
                 .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
                 .collect(Collectors.toList());
     }
 
-    public List<ProdutoDto> buscarPorCategoria (Long id){
-        Categoria categoria = categoriaRepository.findById(id)
+    public List<ProdutoDto> buscarPorCategoria (String name){
+        Categoria categoria = categoriaRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
 
-        return produtoRepository.findByCategoria(categoria)
+        return produtoRepository.findByCategoria(categoria.getName())
                 .stream()
                 .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
@@ -121,29 +121,16 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 
-    public void desabilitar(Long id){
 
+
+    public void alternarStatus(Long id) {
         Produto produto = produtoRepository.findById(id)
-                        .orElseThrow(()-> new EntityNotFoundException("Produto não encontrado"));
-        if(produto.getHabilitar().equals(false)){
-            throw new EntidadeDesabilitadaException();
-        }
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
 
-        produtoRepository.desabilitarProduto(id);
-        log.info("O produto foi desabilitado com êxito: {}", id);
-    }
+        boolean novoStatus = !produto.getHabilitar();
 
-    public void habilitar(Long id){
-        Produto produto = produtoRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("Produto não encontrado"));
-
-            if (produto.getHabilitar().equals(true)) {
-                throw new EntidadeHabilitadaException();
-            }
-
-
-        produtoRepository.habilitarProduto(id);
-        log.info("O produto foi habilitado com êxito: {}", id);
+        produtoRepository.atualizarStatusProduto(id, novoStatus);
+        log.info("O produto foi {} com êxito: {}", novoStatus ? "habilitado" : "desabilitado", id);
     }
 
 

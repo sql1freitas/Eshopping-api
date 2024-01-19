@@ -8,18 +8,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoriaRepository extends JpaRepository <Categoria, Long> {
 
     @Modifying
-    @Query("UPDATE Categoria c SET c.habilitar = false WHERE c.id = :id")
+    @Query("UPDATE Categoria c SET c.habilitar = :status WHERE c.id = :id")
     @Transactional
-    void desabilitarCategoria(@Param("id") Long id);
+    void atualizarStatusCategoria(@Param("id") Long id, @Param("status") Boolean status);
 
-    @Modifying
-    @Query("UPDATE Categoria c SET c.habilitar = true WHERE c.id = :id")
-    @Transactional
-    void habilitarCategoria(@Param("id") Long id);
+
+    Optional <Categoria> findByNameIgnoreCase(String name);
 
     List<Categoria> findByNameIgnoreCaseStartingWith (String name);
 }
