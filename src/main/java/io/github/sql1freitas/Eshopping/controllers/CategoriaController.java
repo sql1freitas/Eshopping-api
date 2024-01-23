@@ -38,7 +38,7 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.OK).body(categoriaList);
     }
 
-    @GetMapping("/todos/produto/{id}")
+    @GetMapping("/todos/produto/{name}")
     public ResponseEntity<List<ProdutoDto>> listarTodos (@PathVariable String name){
 
         List<ProdutoDto> produtoList = categoriaService.listarTodosProdutos(name);
