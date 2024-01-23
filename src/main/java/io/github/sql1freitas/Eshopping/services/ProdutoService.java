@@ -15,7 +15,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,7 +63,7 @@ public class ProdutoService {
     }
 
     public List<ProdutoDto> listarTodos (){
-        return produtoRepository.findAll()
+        return produtoRepository.findAll(PageRequest.of(0, 10))
                 .stream()
                 .filter(produto -> produto.getHabilitar().equals(true))
                 .map(assemble::produtoParaDto)
@@ -85,7 +88,7 @@ public class ProdutoService {
             throw new ValorInvalidoException();
         }
 
-         return produtoRepository.findByPriceBetween(primeiroValor, segundoValor)
+         return produtoRepository.findAllByPriceBetween(primeiroValor, segundoValor)
                  .stream()
                  .filter(produto -> produto.getHabilitar().equals(true))
                  .map(assemble::produtoParaDto)

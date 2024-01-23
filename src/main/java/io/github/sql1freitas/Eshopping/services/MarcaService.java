@@ -13,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -39,7 +40,7 @@ public class MarcaService {
     }
 
     public List<MarcaDto> listarTodas (){
-        return marcaRepository.findAll()
+        return marcaRepository.findAll(PageRequest.of(0, 10))
                 .stream()
                 .filter(marca -> marca.getHabilitar().equals(true))
                 .map(assemble::marcaParaDto)
