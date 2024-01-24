@@ -17,8 +17,5 @@ public interface CategoriaRepository extends JpaRepository <Categoria, Long> {
     @Transactional
     void atualizarStatusCategoria(@Param("id") Long id, @Param("status") Boolean status);
 
-
-    Optional <Categoria> findByNameIgnoreCase(String name);
-
-    List<Categoria> findByNameIgnoreCaseStartingWith (String name);
+    Optional<Categoria> findByNameIgnoreCaseStartingWith (String name);
 }

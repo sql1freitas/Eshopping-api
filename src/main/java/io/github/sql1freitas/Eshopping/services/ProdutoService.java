@@ -15,10 +15,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,24 +64,19 @@ public class ProdutoService {
         return assemble.produtoParaDto(produto);
     }
 
-    public List<ProdutoDto> listarTodos (){
-        return produtoRepository.findAll(PageRequest.of(0, 10))
-                .stream()
-                .filter(produto -> produto.getHabilitar().equals(true))
-                .map(assemble::produtoParaDto)
-                .collect(Collectors.toList());
+    public Page<ProdutoDto> listarTodos (PageRequest pageRequest){
+
+       return produtoRepository.findByHabilitar(true, pageRequest)
+               .map(assemble::produtoParaDto);
     }
 
+    public Page<ProdutoDto> buscarPorNome(String name, PageRequest pageRequest){
 
-    public List<ProdutoDto> buscarPorNome(String name){
-        return produtoRepository.findByNameIgnoreCaseStartingWith(name)
-                .stream()
-                .filter(produto -> produto.getHabilitar().equals(true))
-                .map(assemble::produtoParaDto)
-                .collect(Collectors.toList());
+        return produtoRepository.findByHabilitarAndNameIgnoreCaseStartingWith(true, name, pageRequest)
+                .map(assemble::produtoParaDto);
     }
 
-    public List<ProdutoDto> buscarPorRangePreco (Double primeiroValor,Double segundoValor){
+    public Page<ProdutoDto> buscarPorRangePreco (Double primeiroValor, Double segundoValor, PageRequest pageRequest){
 
         if(primeiroValor < 0 || segundoValor < 0){
             throw new ValorInvalidoException();
@@ -88,33 +85,25 @@ public class ProdutoService {
             throw new ValorInvalidoException();
         }
 
-         return produtoRepository.findAllByPriceBetween(primeiroValor, segundoValor)
-                 .stream()
-                 .filter(produto -> produto.getHabilitar().equals(true))
-                 .map(assemble::produtoParaDto)
-                 .collect(Collectors.toList());
+         return produtoRepository.findByHabilitarAndPriceBetween(true, primeiroValor, segundoValor, pageRequest)
+                 .map(assemble::produtoParaDto);
     }
 
-    public List<ProdutoDto> buscarPorMarca (String name){
-        Marca marca = marcaRepository.findByNameIgnoreCase(name)
+    public Page<ProdutoDto> buscarPorMarca (String name, PageRequest pageRequest){
+        Marca marca = marcaRepository.findByNameIgnoreCaseStartingWith(name)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
 
-        return produtoRepository.findByMarca(marca.getName())
-                .stream()
-                .filter(produto -> produto.getHabilitar().equals(true))
-                .map(assemble::produtoParaDto)
-                .collect(Collectors.toList());
+        return produtoRepository.findByHabilitarAndMarca(name,true,pageRequest)
+                .map(assemble::produtoParaDto);
+
     }
 
-    public List<ProdutoDto> buscarPorCategoria (String name){
-        Categoria categoria = categoriaRepository.findByNameIgnoreCase(name)
-                .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
+    public Page<ProdutoDto> buscarPorCategoria (String name, PageRequest pageRequest){
+        Categoria categoria = categoriaRepository.findByNameIgnoreCaseStartingWith(name)
+                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
 
-        return produtoRepository.findByCategoria(categoria.getName())
-                .stream()
-                .filter(produto -> produto.getHabilitar().equals(true))
-                .map(assemble::produtoParaDto)
-                .collect(Collectors.toList());
+        return produtoRepository.findByHablitarAndCategoria(name, true, pageRequest)
+                .map(assemble::produtoParaDto);
     }
 
 

@@ -24,8 +24,7 @@ public interface MarcaRepository extends JpaRepository <Marca, Long> {
     @Transactional
     void atualizarStatusMarca(@Param("id") Long id, @Param("status") Boolean status);
 
-   Optional< Marca > findByNameIgnoreCase(String name);
-   List<Marca> findByNameIgnoreCaseStartingWith(String name);
+    Optional<Marca> findByNameIgnoreCaseStartingWith(String name);
 
 
 

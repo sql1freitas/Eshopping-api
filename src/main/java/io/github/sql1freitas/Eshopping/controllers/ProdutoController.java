@@ -4,6 +4,8 @@ import io.github.sql1freitas.Eshopping.dto.ProdutoDto;
 import io.github.sql1freitas.Eshopping.entity.Produto;
 import io.github.sql1freitas.Eshopping.services.ProdutoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,37 +30,51 @@ public class ProdutoController {
     }
 
     @GetMapping("/todos")
-    public ResponseEntity<List<ProdutoDto>> listarTodos(){
-        List<ProdutoDto> produtoList = produtoService.listarTodos();
+    public ResponseEntity<Page<ProdutoDto>> listarTodos(@RequestParam (defaultValue = "0") int pagina,
+                                                        @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-        return ResponseEntity.status(HttpStatus.OK).body(produtoList);
+        Page<ProdutoDto> produtoPage = produtoService.listarTodos(PageRequest.of(pagina, tamanhoPagina));
+
+        return ResponseEntity.status(HttpStatus.OK).body(produtoPage);
     }
     @GetMapping("/todos/nome/{name}")
-    public ResponseEntity<List<ProdutoDto>> buscarPorNome (@PathVariable String name){
-        List<ProdutoDto> produtoList = produtoService.buscarPorNome(name);
+    public ResponseEntity<Page<ProdutoDto>> buscarPorNome (@PathVariable String name,
+                                                           @RequestParam (defaultValue = "0") int pagina,
+                                                           @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-        return ResponseEntity.status(HttpStatus.OK).body(produtoList);
+        Page<ProdutoDto> produtoPage = produtoService.buscarPorNome(name, PageRequest.of(pagina, tamanhoPagina));
+
+        return ResponseEntity.status(HttpStatus.OK).body(produtoPage);
     }
     @GetMapping("/todos/rangeDeValor/{primeiroValor}/{segundoValor}")
-    public ResponseEntity<List<ProdutoDto>> buscarRangePreco(@PathVariable Double primeiroValor,
-                                                             @PathVariable Double segundoValor){
-        List<ProdutoDto> produtoList = produtoService.buscarPorRangePreco(primeiroValor, segundoValor);
+    public ResponseEntity<Page<ProdutoDto>> buscarRangePreco(@PathVariable Double primeiroValor,
+                                                             @PathVariable Double segundoValor,
+                                                             @RequestParam (defaultValue = "0") int pagina,
+                                                             @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-        return ResponseEntity.status(HttpStatus.OK).body(produtoList);
+        Page<ProdutoDto> produtoPage = produtoService.buscarPorRangePreco(primeiroValor, segundoValor, PageRequest.of(pagina, tamanhoPagina));
+
+        return ResponseEntity.status(HttpStatus.OK).body(produtoPage);
     }
 
     @GetMapping("/todos/marca/{name}")
-    public ResponseEntity<List<ProdutoDto>> buscarPorMarca(@PathVariable String name){
-       List<ProdutoDto> produtoList = produtoService.buscarPorMarca(name);
+    public ResponseEntity<Page<ProdutoDto>> buscarPorMarca(@PathVariable String name,
+                                                           @RequestParam (defaultValue = "0") int pagina,
+                                                           @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-       return ResponseEntity.status(HttpStatus.OK).body(produtoList);
+        Page<ProdutoDto> produtoPage = produtoService.buscarPorMarca(name, PageRequest.of(pagina,tamanhoPagina));
+
+       return ResponseEntity.status(HttpStatus.OK).body(produtoPage);
     }
 
     @GetMapping("/todos/categoria/{name}")
-    public ResponseEntity<List<ProdutoDto>> buscarPorCategoria(@PathVariable String name){
-        List<ProdutoDto> produtoList = produtoService.buscarPorCategoria(name);
+    public ResponseEntity<Page<ProdutoDto>> buscarPorCategoria(@PathVariable String name,
+                                                               @RequestParam (defaultValue = "0") int pagina,
+                                                               @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-        return ResponseEntity.status(HttpStatus.OK).body(produtoList);
+        Page<ProdutoDto> produtoPage = produtoService.buscarPorCategoria(name, PageRequest.of(pagina,tamanhoPagina));
+
+        return ResponseEntity.status(HttpStatus.OK).body(produtoPage);
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> excluirProduto(@PathVariable Long id){
