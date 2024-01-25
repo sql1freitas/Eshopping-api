@@ -13,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -37,34 +38,27 @@ public class CategoriaService {
         return assemble.categoriaDto(newCategoria);
     }
 
-    public List<CategoriaDto> listarTodos (){
+    public Page<CategoriaDto> listarTodos (PageRequest pageRequest){
 
-        return categoriaRepository.findAll(PageRequest.of(0,10))
-                .stream()
-                .filter(categoria -> categoria.getHabilitar().equals(true))
-                .map(assemble::categoriaDto)
-                .collect(Collectors.toList());
+        return categoriaRepository.findByHabilitar(true, pageRequest)
+                .map(assemble::categoriaDto);
     }
 
-    public List<ProdutoDto> listarTodosProdutos (String name){
+    public Page<ProdutoDto> listarTodosProdutos (String name, PageRequest pageRequest){
 
-        Categoria categoria = categoriaRepository.findByNameIgnoreCase(name)
+        Categoria categoria = categoriaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(true, name)
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
 
-        return produtoRepository.findByCategoria(categoria.getName())
-                .stream()
-                .filter(produto -> produto.getHabilitar().equals(true))
-                .map(assemble::produtoParaDto)
-                .collect(Collectors.toList());
+        return produtoRepository.findByHablitarAndCategoria(name,true, pageRequest)
+                .map(assemble::produtoParaDto);
+
     }
 
-    public List<CategoriaDto> listarCategoriaPorNome (String name){
+    public Page<CategoriaDto> listarCategoriaPorNome (String name, PageRequest pageRequest){
 
-        return categoriaRepository.findByNameIgnoreCaseStartingWith(name)
-                .stream()
-                .filter(categoria -> categoria.getHabilitar().equals(true))
-                .map(assemble::categoriaDto)
-                .collect(Collectors.toList());
+        return categoriaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(name, true, pageRequest)
+                .map(assemble::categoriaDto);
+
     }
 
     public void excluirCategoria (Long id){

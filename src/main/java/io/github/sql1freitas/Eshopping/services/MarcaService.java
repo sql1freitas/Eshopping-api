@@ -13,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -39,35 +40,28 @@ public class MarcaService {
         return assemble.marcaParaDto(newMarca);
     }
 
-    public List<MarcaDto> listarTodas (){
-        return marcaRepository.findAll(PageRequest.of(0, 10))
-                .stream()
-                .filter(marca -> marca.getHabilitar().equals(true))
-                .map(assemble::marcaParaDto)
-                .collect(Collectors.toList());
+    public Page<MarcaDto> listarTodas (PageRequest pageRequest){
+
+        return marcaRepository.findByHabilitar(true, pageRequest)
+                .map(assemble::marcaParaDto);
     }
 
 
-    public List<ProdutoDto> listarTodosProdutos (String name) {
+    public Page<ProdutoDto> listarTodosProdutos (String name, PageRequest pageRequest) {
 
-        Marca marca = marcaRepository.findByNameIgnoreCase(name)
+        Marca marca = marcaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(true, name)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
 
-        return produtoRepository.findByMarca(marca.getName())
-                .stream()
-                .filter(produto -> produto.getHabilitar().equals(true))
-                .map(assemble::produtoParaDto)
-                .collect(Collectors.toList());
+        return produtoRepository.findByHabilitarAndMarca(name, true, pageRequest)
+                .map(assemble::produtoParaDto);
 
     }
 
-    public List<MarcaDto> listarMarcaPorNome (String name){
+    public Page<MarcaDto> listarMarcaPorNome (String name, PageRequest pageRequest){
 
-        return marcaRepository.findByNameIgnoreCaseStartingWith(name)
-                .stream()
-                .filter(marca -> marca.getHabilitar().equals(true))
-                .map(assemble::marcaParaDto)
-                .collect(Collectors.toList());
+        return marcaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(name, true, pageRequest)
+                .map(assemble::marcaParaDto);
+
 
     }
 

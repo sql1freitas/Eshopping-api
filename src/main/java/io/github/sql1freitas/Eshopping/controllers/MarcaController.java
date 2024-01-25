@@ -7,6 +7,8 @@ import io.github.sql1freitas.Eshopping.entity.Marca;
 import io.github.sql1freitas.Eshopping.entity.Produto;
 import io.github.sql1freitas.Eshopping.services.MarcaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,25 +32,32 @@ public class MarcaController {
     }
 
     @GetMapping("/todos")
-    public ResponseEntity<List<MarcaDto>> listarTodos(){
+    public ResponseEntity<Page<MarcaDto>> listarTodos(@RequestParam (defaultValue = "0") int pagina,
+                                                      @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-        List<MarcaDto> marcaList = marcaService.listarTodas();
+        Page<MarcaDto> marcaPage = marcaService.listarTodas(PageRequest.of(pagina,tamanhoPagina));
 
-        return ResponseEntity.status(HttpStatus.OK).body(marcaList);
+        return ResponseEntity.status(HttpStatus.OK).body(marcaPage);
     }
 
     @GetMapping("/todos/produto/{name}")
-    public ResponseEntity<List<ProdutoDto>> listarTodos (@PathVariable String name){
+    public ResponseEntity<Page<ProdutoDto>> listarTodos (@PathVariable String name,
+                                                         @RequestParam (defaultValue = "0") int pagina,
+                                                         @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-        List<ProdutoDto> produtoList = marcaService.listarTodosProdutos(name);
+        Page<ProdutoDto> produtoPage = marcaService.listarTodosProdutos(name, PageRequest.of(pagina,tamanhoPagina));
 
-        return ResponseEntity.status(HttpStatus.OK).body(produtoList);
+        return ResponseEntity.status(HttpStatus.OK).body(produtoPage);
     }
-    @GetMapping("/todos/name/{name}")
-    public ResponseEntity<List<MarcaDto>> listarMarcasNome(@PathVariable String name){
-         List<MarcaDto> marcaList = marcaService.listarMarcaPorNome(name);
 
-         return ResponseEntity.status(HttpStatus.OK).body(marcaList);
+    @GetMapping("/todos/name/{name}")
+    public ResponseEntity<Page<MarcaDto>> listarMarcasNome(@PathVariable String name,
+                                                           @RequestParam (defaultValue = "0") int pagina,
+                                                           @RequestParam (defaultValue = "10") int tamanhoPagina){
+
+        Page<MarcaDto> marcaPage = marcaService.listarMarcaPorNome(name, PageRequest.of(pagina,tamanhoPagina));
+
+         return ResponseEntity.status(HttpStatus.OK).body(marcaPage);
     }
 
     @DeleteMapping("/delete/{id}")

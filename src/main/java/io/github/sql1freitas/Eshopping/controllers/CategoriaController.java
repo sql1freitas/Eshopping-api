@@ -6,6 +6,8 @@ import io.github.sql1freitas.Eshopping.dto.ProdutoDto;
 import io.github.sql1freitas.Eshopping.entity.Categoria;
 import io.github.sql1freitas.Eshopping.services.CategoriaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -31,25 +33,31 @@ public class CategoriaController {
     }
 
     @GetMapping("/todos")
-    public ResponseEntity<List<CategoriaDto>> listarTodos(){
+    public ResponseEntity<Page<CategoriaDto>> listarTodos(@RequestParam (defaultValue = "0") int pagina,
+                                                          @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-        List<CategoriaDto> categoriaList = categoriaService.listarTodos();
+        Page<CategoriaDto> categoriaPage = categoriaService.listarTodos(PageRequest.of(pagina,tamanhoPagina));
 
-        return ResponseEntity.status(HttpStatus.OK).body(categoriaList);
+        return ResponseEntity.status(HttpStatus.OK).body(categoriaPage);
     }
 
     @GetMapping("/todos/produto/{name}")
-    public ResponseEntity<List<ProdutoDto>> listarTodos (@PathVariable String name){
+    public ResponseEntity<Page<ProdutoDto>> listarTodos (@PathVariable String name,
+                                                         @RequestParam (defaultValue = "0") int pagina,
+                                                         @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-        List<ProdutoDto> produtoList = categoriaService.listarTodosProdutos(name);
+        Page<ProdutoDto> produtoPage = categoriaService.listarTodosProdutos(name, PageRequest.of(pagina,tamanhoPagina));
 
-        return ResponseEntity.status(HttpStatus.OK).body(produtoList);
+        return ResponseEntity.status(HttpStatus.OK).body(produtoPage);
     }
     @GetMapping("/todos/name/{name}")
-    public ResponseEntity<List<CategoriaDto>> listarCategoriaNome(@PathVariable String name){
-        List<CategoriaDto> categoriaList = categoriaService.listarCategoriaPorNome(name);
+    public ResponseEntity<Page<CategoriaDto>> listarCategoriaNome(@PathVariable String name,
+                                                                  @RequestParam (defaultValue = "0") int pagina,
+                                                                  @RequestParam (defaultValue = "10") int tamanhoPagina){
 
-        return ResponseEntity.status(HttpStatus.OK).body(categoriaList);
+        Page<CategoriaDto> categoriaPage = categoriaService.listarCategoriaPorNome(name, PageRequest.of(pagina,tamanhoPagina));
+
+        return ResponseEntity.status(HttpStatus.OK).body(categoriaPage);
     }
 
     @DeleteMapping("/delete/{id}")

@@ -1,6 +1,9 @@
 package io.github.sql1freitas.Eshopping.repositories;
 
 import io.github.sql1freitas.Eshopping.entity.Categoria;
+import io.github.sql1freitas.Eshopping.entity.Marca;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,5 +20,9 @@ public interface CategoriaRepository extends JpaRepository <Categoria, Long> {
     @Transactional
     void atualizarStatusCategoria(@Param("id") Long id, @Param("status") Boolean status);
 
-    Optional<Categoria> findByNameIgnoreCaseStartingWith (String name);
+    Optional<Categoria> findByHabilitarAndNameIgnoreCaseStartingWith (Boolean habilitar, String name);
+
+    Page<Categoria> findByHabilitarAndNameIgnoreCaseStartingWith(String name, Boolean habilitar, Pageable pageable);
+
+    Page<Categoria> findByHabilitar(Boolean habilitar, Pageable pageable);
 }

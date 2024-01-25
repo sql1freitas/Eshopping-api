@@ -1,6 +1,8 @@
 package io.github.sql1freitas.Eshopping.repositories;
 
 import io.github.sql1freitas.Eshopping.entity.Marca;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,9 +26,11 @@ public interface MarcaRepository extends JpaRepository <Marca, Long> {
     @Transactional
     void atualizarStatusMarca(@Param("id") Long id, @Param("status") Boolean status);
 
-    Optional<Marca> findByNameIgnoreCaseStartingWith(String name);
+    Optional<Marca> findByHabilitarAndNameIgnoreCaseStartingWith(Boolean habilitar, String name);
 
+    Page<Marca> findByHabilitarAndNameIgnoreCaseStartingWith(String name, Boolean habilitar, Pageable pageable);
 
+    Page<Marca> findByHabilitar(Boolean habilitar, Pageable pageable);
 
 }
 
