@@ -1,12 +1,15 @@
 package io.github.sql1freitas.Eshopping.enums;
 
+import lombok.Getter;
+
+
 public enum UserRole {
 
-    ADMIN("admin"),
-    USER("user");
+    ADMIN("ADMIN"),
+    USER("USER");
 
 
-    private String role;
+    private final String role;
 
     UserRole(String role){
         this.role = role;
