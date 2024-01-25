@@ -52,7 +52,7 @@ public class MarcaService {
         Marca marca = marcaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(true, name)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
 
-        return produtoRepository.findByHabilitarAndMarca(name, true, pageRequest)
+        return produtoRepository.findByHabilitarAndMarcaNameIgnoreCaseStartingWith(true, name, pageRequest)
                 .map(assemble::produtoParaDto);
 
     }

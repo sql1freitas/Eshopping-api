@@ -22,7 +22,7 @@ public interface CategoriaRepository extends JpaRepository <Categoria, Long> {
 
     Optional<Categoria> findByHabilitarAndNameIgnoreCaseStartingWith (Boolean habilitar, String name);
 
-    Page<Categoria> findByHabilitarAndNameIgnoreCaseStartingWith(String name, Boolean habilitar, Pageable pageable);
+    Page<Categoria> findByHabilitarAndNameIgnoreCaseStartingWith(Boolean habilitar, String name, Pageable pageable);
 
     Page<Categoria> findByHabilitar(Boolean habilitar, Pageable pageable);
 }

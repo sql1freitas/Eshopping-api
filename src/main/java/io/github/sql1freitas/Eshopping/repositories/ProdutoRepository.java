@@ -22,15 +22,13 @@ public interface ProdutoRepository extends JpaRepository <Produto,Long> {
     @Transactional
     void atualizarStatusProduto(@Param("id") Long id, @Param("status") Boolean status);
 
-    @Query("SELECT p FROM Produto p WHERE p.marca.name = :nomeMarca%")
-    Page<Produto> findByHabilitarAndMarca(@Param("nomeMarca") String nomeMarca, Boolean habilitar, Pageable pageable);
-    @Query("SELECT p FROM Produto p WHERE p.categoria.name = :nomeCategoria%")
-    Page<Produto> findByHablitarAndCategoria(@Param("nomeCategoria") String nomeCategoria, Boolean habilitar, Pageable pageable);
-
     Page<Produto> findByHabilitarAndNameIgnoreCaseStartingWith (Boolean habilitar, String name, Pageable pageable);
-    @Query("SELECT p FROM Produto p WHERE p.price BETWEEN :primeiroValor AND :segundoValor")
+    @Query("SELECT p FROM Produto p WHERE p.habilitar = :habilitar AND p.price BETWEEN :primeiroValor AND :segundoValor")
     Page<Produto> findByHabilitarAndPriceBetween (Boolean habilitar, Double primeiroValor, Double segundoValor, Pageable pageable);
 
     Page<Produto> findByHabilitar(boolean habilitar, Pageable pageable);
+
+    Page<Produto> findByHabilitarAndMarcaNameIgnoreCaseStartingWith(Boolean habilitar, String name, Pageable pageable);
+    Page<Produto> findByHabilitarAndCategoriaNameIgnoreCaseStartingWith(Boolean habilitar, String name, Pageable pageable);
 
 }

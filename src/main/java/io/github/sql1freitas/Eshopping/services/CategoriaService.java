@@ -49,14 +49,14 @@ public class CategoriaService {
         Categoria categoria = categoriaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(true, name)
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
 
-        return produtoRepository.findByHablitarAndCategoria(name,true, pageRequest)
+        return produtoRepository.findByHabilitarAndCategoriaNameIgnoreCaseStartingWith(true,name, pageRequest)
                 .map(assemble::produtoParaDto);
 
     }
 
     public Page<CategoriaDto> listarCategoriaPorNome (String name, PageRequest pageRequest){
 
-        return categoriaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(name, true, pageRequest)
+        return categoriaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(true, name, pageRequest)
                 .map(assemble::categoriaDto);
 
     }
@@ -75,7 +75,7 @@ public class CategoriaService {
 
         boolean novoStatus = !categoria.getHabilitar();
 
-        produtoRepository.atualizarStatusProduto(id, novoStatus);
+        categoriaRepository.atualizarStatusCategoria(id, novoStatus);
         log.info("A categoria foi {} com êxito: {}", novoStatus ? "habilitado" : "desabilitado", id);
     }
 }

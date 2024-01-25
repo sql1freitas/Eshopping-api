@@ -93,16 +93,18 @@ public class ProdutoService {
         Marca marca = marcaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(true, name)
                 .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
 
-        return produtoRepository.findByHabilitarAndMarca(name,true,pageRequest)
+        return produtoRepository.findByHabilitarAndMarcaNameIgnoreCaseStartingWith(true,name,pageRequest)
                 .map(assemble::produtoParaDto);
 
     }
 
     public Page<ProdutoDto> buscarPorCategoria (String name, PageRequest pageRequest){
+
         Categoria categoria = categoriaRepository.findByHabilitarAndNameIgnoreCaseStartingWith(true, name)
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
 
-        return produtoRepository.findByHablitarAndCategoria(name, true, pageRequest)
+
+        return produtoRepository.findByHabilitarAndCategoriaNameIgnoreCaseStartingWith(true, name, pageRequest)
                 .map(assemble::produtoParaDto);
     }
 
